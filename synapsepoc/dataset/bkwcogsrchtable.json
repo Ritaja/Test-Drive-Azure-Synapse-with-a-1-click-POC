@@ -1,0 +1,15 @@
+{
+	"name": "bkwcogsrchtable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bkwcogsrchtable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "azureblobSkillsetDocument"
+		}
+	}
+}

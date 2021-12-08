@@ -1,0 +1,12 @@
+{
+	"name": "bkwcogsearchDocs",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"sqlPool": {
+			"referenceName": "con22ibnevstcucqpocws1p1",
+			"type": "SqlPoolReference"
+		}
+	}
+}
