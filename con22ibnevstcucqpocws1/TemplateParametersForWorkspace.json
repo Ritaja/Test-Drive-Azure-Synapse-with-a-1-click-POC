@@ -8,6 +8,15 @@
 		"TripFaresSynapseAnalyticsLinkedService_connectionString": {
 			"value": ""
 		},
+		"bkwcogsrchDocsStaging_connectionString": {
+			"value": ""
+		},
+		"bkwcogsrchEntities_connectionString": {
+			"value": ""
+		},
+		"bkwcogsrchtable_connectionString": {
+			"value": ""
+		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/Azure/Test-Drive-Azure-Synapse-with-a-1-click-POC/main/tripDataAndFaresCSV/trip-data.csv"
 		},

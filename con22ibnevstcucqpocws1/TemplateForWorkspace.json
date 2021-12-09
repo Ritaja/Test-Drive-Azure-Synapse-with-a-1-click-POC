@@ -11,6 +11,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TripFaresSynapseAnalyticsLinkedService'"
 		},
+		"bkwcogsrchDocsStaging_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'bkwcogsrchDocsStaging'"
+		},
+		"bkwcogsrchEntities_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'bkwcogsrchEntities'"
+		},
+		"bkwcogsrchtable_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'bkwcogsrchtable'"
+		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/Azure/Test-Drive-Azure-Synapse-with-a-1-click-POC/main/tripDataAndFaresCSV/trip-data.csv"
@@ -549,6 +561,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/copyTable')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy bkw Docs",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureTableSource",
+								"azureTableSourceIgnoreTableNotFound": false
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "bkwcogsrchDocsStaging",
+									"type": "LinkedServiceReference"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "bkwcogsrchtable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "bkwcogsrcsqltable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "TripFaresDataPipeline"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/bkwcogsrchtable')]",
+				"[concat(variables('workspaceId'), '/datasets/bkwcogsrcsqltable')]",
+				"[concat(variables('workspaceId'), '/linkedServices/bkwcogsrchDocsStaging')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalyticsFaresData')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -783,6 +862,154 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/TripFaresSynapseAnalyticsLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsearchDocs')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [],
+				"typeProperties": {},
+				"sqlPool": {
+					"referenceName": "con22ibnevstcucqpocws1p1",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/con22ibnevstcucqpocws1p1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsrchtable')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "bkwcogsrchtable",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "azureblobSkillsetDocument"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/bkwcogsrchtable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsrcsqltable')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "PartitionKey",
+						"type": "varchar"
+					},
+					{
+						"name": "RowKey",
+						"type": "varchar"
+					},
+					{
+						"name": "Timestamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Documentid",
+						"type": "varchar"
+					},
+					{
+						"name": "Content",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_author",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_character_count",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "metadata_content_type",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_creation_date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "metadata_last_modified",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "metadata_page_count",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "metadata_storage_content_md5",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_storage_content_type",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_storage_file_extension",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_storage_last_modified",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "metadata_storage_name",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_storage_path",
+						"type": "varchar"
+					},
+					{
+						"name": "metadata_storage_size",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "metadata_word_count",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "bkwcogsrchtable"
+				},
+				"sqlPool": {
+					"referenceName": "con22ibnevstcucqpocws1p1",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/con22ibnevstcucqpocws1p1')]"
 			]
 		},
 		{
@@ -1192,6 +1419,63 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsrchDocsStaging')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('bkwcogsrchDocsStaging_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsrchEntities')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureTableStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('bkwcogsrchEntities_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bkwcogsrchtable')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureTableStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('bkwcogsrchtable_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/keyVaultLinkedservice')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -1221,7 +1505,8 @@
 						"dataFlowProperties": {
 							"computeType": "General",
 							"coreCount": 8,
-							"timeToLive": 0
+							"timeToLive": 0,
+							"cleanup": true
 						}
 					}
 				},
