@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy bkw Docs",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -21,8 +21,7 @@
 					},
 					"sink": {
 						"type": "SqlPoolSink",
-						"allowCopyCommand": true,
-						"tableOption": "autoCreate"
+						"allowCopyCommand": true
 					},
 					"enableStaging": true,
 					"stagingSettings": {
@@ -40,7 +39,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "bkwcogsearchDocs",
+						"referenceName": "bkwcogsrcsqltable",
 						"type": "DatasetReference"
 					}
 				]

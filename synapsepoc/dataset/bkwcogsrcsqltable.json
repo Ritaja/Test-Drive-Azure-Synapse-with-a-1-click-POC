@@ -1,0 +1,105 @@
+{
+	"name": "bkwcogsrcsqltable",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "PartitionKey",
+				"type": "varchar"
+			},
+			{
+				"name": "RowKey",
+				"type": "varchar"
+			},
+			{
+				"name": "Timestamp",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "Documentid",
+				"type": "varchar"
+			},
+			{
+				"name": "Content",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_author",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_character_count",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "metadata_content_type",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_creation_date",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "metadata_last_modified",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "metadata_page_count",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "metadata_storage_content_md5",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_storage_content_type",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_storage_file_extension",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_storage_last_modified",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "metadata_storage_name",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_storage_path",
+				"type": "varchar"
+			},
+			{
+				"name": "metadata_storage_size",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "metadata_word_count",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "bkwcogsrchtable"
+		},
+		"sqlPool": {
+			"referenceName": "con22ibnevstcucqpocws1p1",
+			"type": "SqlPoolReference"
+		}
+	}
+}
